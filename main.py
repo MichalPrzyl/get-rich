@@ -21,6 +21,18 @@ def load_income_sources():
 #     "start_date": "2021-01-01",
 # }
 
+def refresh_income_sources():
+# Clear all existing income source widgets
+    for widget in root.winfo_children():
+        # if isinstance(widget, tk.Label) or isinstance(widget, tk.Button):
+        widget.destroy()
+
+def delete_income(index):
+    del income_sources[index]
+    save_income_sources()
+    refresh_income_sources()
+    display_all()
+
 def add_new_income(name, amount, start_dt, window):
     income_sources.append({
         "name": name,
@@ -28,6 +40,8 @@ def add_new_income(name, amount, start_dt, window):
         "start_date": start_dt,
     })
     save_income_sources()
+    refresh_income_sources()
+    display_all()
     window.destroy()
 
 def open_new_window():
@@ -67,15 +81,25 @@ def open_new_window():
 root = tk.Tk()
 root.title("GetRich")
 root.geometry("400x400")
+
 load_income_sources()
-new_window_button = tk.Button(root, text="Dodaj źródło przychodu", command=open_new_window)
-new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
 
-# Display income sources.
-label = tk.Label(root, text="Źródła przychodu", font=("Helvetica", 16, "bold"))
-label.pack(anchor='w')
-for income_source in income_sources:
-    src_income = tk.Label(root, text=f"{income_source['name']}: {income_source['amount']}")
-    src_income.pack(anchor='w')
+def display_all():
+    new_window_button = tk.Button(root, text="Dodaj źródło przychodu", command=open_new_window)
+    new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
 
+    # Display income sources.
+    label = tk.Label(root, text="Źródła przychodu", font=("Helvetica", 16, "bold"))
+    label.pack(anchor='w')
+
+    for index, income_source in enumerate(income_sources):
+        frame = tk.Frame(root)
+        frame.pack(anchor='w', fill='x')
+
+        src_income = tk.Label(frame, text=f"{income_source['name']}: {income_source['amount']}")
+        src_income.pack(side=tk.LEFT)
+
+        delete_button = tk.Button(frame, text="Usuń", command=lambda i=index: delete_income(i))
+        delete_button.pack(side=tk.RIGHT)
+display_all()
 root.mainloop()

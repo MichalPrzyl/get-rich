@@ -1,0 +1,17 @@
+[
+    {
+        "name": "work 1",
+        "amount": "1200",
+        "start_date": "2024-02-23"
+    },
+    {
+        "name": "wynajem mieszkania",
+        "amount": "1500",
+        "start_date": "2023-03-27"
+    },
+    {
+        "name": "sprzeda\u017c detaliczna",
+        "amount": "13245",
+        "start_date": "2023-04-02"
+    }
+]
