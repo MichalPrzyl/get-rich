@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.dates as mdates
-from datetime import datetime, timedelta
-# internal
+from datetime import datetime
 from utils import calculate_values_for_months
-
 
 def draw_chart(start_date, end_date, income_outcome_data):
     # Konwersja stringów na obiekty datetime
@@ -13,8 +11,8 @@ def draw_chart(start_date, end_date, income_outcome_data):
 
     # Tworzenie listy miesięcy w podanym zakresie dat
     months = pd.date_range(start=start_date, end=end_date, freq='MS')
+    
     # Y asis data.
-    # y = range(1, len(months) + 1)  # Tworzy listę danych Y dopasowaną do liczby miesięcy
     y = calculate_values_for_months(months, income_outcome_data)
 
     # Tworzenie wykresu
@@ -25,11 +23,15 @@ def draw_chart(start_date, end_date, income_outcome_data):
     plt.gca().xaxis.set_major_locator(mdates.MonthLocator())  # Główne linie siatki co miesiąc
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 
+    # Ustawienie gęstszej skali na osi Y
+    plt.gca().yaxis.set_major_locator(plt.MultipleLocator(100))
+
+    # Włączenie poziomych linii siatki
+    plt.grid(True, which='both', axis='both', linestyle='--', linewidth=0.7)  # Siatka na obu osiach
+
     plt.title(f"Wykres od {start_date.strftime('%Y-%m-%d')} do {end_date.strftime('%Y-%m-%d')}")
     plt.xlabel("Miesiące")
     plt.ylabel("Wartość")
-    plt.grid(True, which='both', axis='x')  # Siatka włączona na osi X
-
     plt.gcf().autofmt_xdate()  # Automatyczne formatowanie dat na osi X
 
     # Wyświetlanie wykresu w nowym oknie
