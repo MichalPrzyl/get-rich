@@ -21,7 +21,7 @@ def load_income_sources():
 #     "start_date": "2021-01-01",
 # }
 
-def add_new_income(name, amount, start_dt):
+def add_new_income(name, amount, start_dt, window):
     print(f"name: {name}")
     print(f"amount: {amount}")
     print(f"start_dt: {start_dt}")
@@ -31,6 +31,7 @@ def add_new_income(name, amount, start_dt):
         "start_date": start_dt,
     })
     save_income_sources()
+    window.destroy()
 
 def open_new_window():
     new_window = tk.Toplevel(root)
@@ -61,15 +62,24 @@ def open_new_window():
     add_income_button = tk.Button(
         new_window, 
         text="Dodaj źródło przychodu1", 
-        command=lambda: add_new_income(name_entry.get(), amount_entry.get(), start_date_entry.get()))
+        command=lambda: add_new_income(
+            name_entry.get(), amount_entry.get(), start_date_entry.get(), new_window))
     add_income_button.pack(side=tk.TOP, anchor="w", pady=0)
 
 # Main app window.
 root = tk.Tk()
 root.title("GetRich")
 root.geometry("400x400")
-# load_income_sources()
+load_income_sources()
 new_window_button = tk.Button(root, text="Dodaj źródło przychodu", command=open_new_window)
 new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
+
+
+# DISPLAY INCOME SOURCES
+label = tk.Label(root, text="Źródła przychodu", font=("Helvetica", 16, "bold"))
+label.pack(anchor='w')  # Użycie metody pack() z paddingiem
+for income_source in income_sources:
+    src_income = tk.Label(root, text=f"{income_source['name']}: {income_source['amount']}")
+    src_income.pack(anchor='w')
 
 root.mainloop()
