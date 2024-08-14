@@ -125,6 +125,64 @@ def open_new_source_outcome_window():
         )
     add_outcome_button.pack(side=tk.TOP, anchor="w", pady=0)
 
+def save_chart_settings(start_date, end_date):
+    with open("chart_settings.json", "w") as file:
+        json.dump({
+            "start_date": start_date,
+            "end_date": end_date
+        }, file)
+
+def load_chart_settings(start_date_entry, end_date_entry):
+    try:
+        with open("chart_settings.json", "r") as file:
+            settings = json.load(file)
+            start_date_entry.delete(0, tk.END)
+            start_date_entry.insert(0, settings["start_date"])
+            end_date_entry.delete(0, tk.END)
+            end_date_entry.insert(0, settings["end_date"])
+    except FileNotFoundError:
+        pass
+
+def open_show_chart_window():
+    new_window = tk.Toplevel(root)
+    new_window.title("Stwórz wykres")
+    # new_window.geometry("500x500")
+    
+    # Start date label.
+    start_date_label = tk.Label(new_window, text=f"Data początkowa wykresu:")
+    start_date_label.pack(anchor='w')
+    # Start date input.
+    start_date_entry = tk.Entry(new_window, width=30)
+    start_date_entry.pack(anchor='w')
+
+    # End date label.
+    end_date_label = tk.Label(new_window, text=f"Data końcowa wykresu:")
+    end_date_label.pack(anchor='w')
+    # End date input.
+    end_date_entry = tk.Entry(new_window, width=30)
+    end_date_entry.pack(anchor='w')
+
+    create_chart_button = tk.Button(
+        new_window, 
+        text="Stwórz wykres", 
+        command=lambda: draw_chart())
+    create_chart_button.pack(side=tk.TOP, anchor="w", pady=0)
+
+    save_chart_settings_button = tk.Button(
+        new_window, 
+        text="Zapisz ustawienia wykresu", 
+        command=lambda: save_chart_settings(start_date_entry.get(), end_date_entry.get())
+    )
+    save_chart_settings_button.pack(side=tk.TOP, anchor="w", pady=0)
+    
+    load_chart_settings_button = tk.Button(
+        new_window, 
+        text="Załaduj ustawienia wykresu", 
+        command=lambda: load_chart_settings(start_date_entry, end_date_entry)
+    )
+    load_chart_settings_button.pack(side=tk.TOP, anchor="w", pady=0)
+
+
 # Main app window.
 root = tk.Tk()
 root.title("GetRich")
@@ -141,7 +199,7 @@ def display_all():
     new_window_button = tk.Button(root, text="Dodaj źródło rozchodu", command=open_new_source_outcome_window)
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
     # Draw chart button.
-    new_window_button = tk.Button(root, text="Wykres", command=lambda: draw_chart())
+    new_window_button = tk.Button(root, text="Wykres", command=lambda: open_show_chart_window())
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
 
 
