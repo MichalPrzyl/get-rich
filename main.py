@@ -165,7 +165,8 @@ def open_show_chart_window():
     create_chart_button = tk.Button(
         new_window, 
         text="Stwórz wykres", 
-        command=lambda: draw_chart(start_date_entry.get(), end_date_entry.get()))
+        command=lambda: draw_chart(start_date_entry.get(), end_date_entry.get(), income_outcome_data)
+    )
     create_chart_button.pack(side=tk.TOP, anchor="w", pady=0)
 
     save_chart_settings_button = tk.Button(
@@ -190,6 +191,10 @@ root.geometry("400x400")
 
 load_income_sources()
 load_outcome_sources()
+income_outcome_data = {
+    "income_sources": income_sources,
+    "outcome_sources": outcome_sources
+}
 
 def display_all():
     # New income source button.

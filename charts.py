@@ -2,17 +2,21 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
+# internal
+from utils import calculate_values_for_months
 
-def draw_chart(start_date, end_date):
+
+def draw_chart(start_date, end_date, income_outcome_data):
     # Konwersja stringów na obiekty datetime
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
 
     # Tworzenie listy miesięcy w podanym zakresie dat
     months = pd.date_range(start=start_date, end=end_date, freq='MS')
-
-    # Przykładowe dane na osi Y
-    y = range(1, len(months) + 1)  # Tworzy listę danych Y dopasowaną do liczby miesięcy
+    print(f"Months: {months}")
+    # Y asis data.
+    # y = range(1, len(months) + 1)  # Tworzy listę danych Y dopasowaną do liczby miesięcy
+    y = calculate_values_for_months(months, income_outcome_data)
 
     # Tworzenie wykresu
     plt.figure(figsize=(10, 6))
