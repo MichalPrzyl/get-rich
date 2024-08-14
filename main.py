@@ -1,65 +1,56 @@
 import json
 import tkinter as tk
+from helpers import ensure_json_file_exists
 from charts import draw_chart
 
+ensure_json_file_exists('sources.json')
+sources = []
 
-income_sources = []
-outcome_sources = []
+def save_sources():
+    with open("sources.json", "w") as file:
+        json.dump(sources, file)
 
-def save_income_sources():
-    with open("income_sources.json", "w") as file:
-        json.dump(income_sources, file)
-
-def load_income_sources():
-    global income_sources
-    with open("income_sources.json", "r") as file:
-        income_sources = json.load(file)
-
-def save_outcome_sources():
-    with open("outcome_sources.json", "w") as file:
-        json.dump(outcome_sources, file)
-
-def load_outcome_sources():
-    global outcome_sources
-    with open("outcome_sources.json", "r") as file:
-        outcome_sources = json.load(file)
+def load_sources():
+    global sources
+    with open("sources.json", "r") as source_file:
+        sources = json.load(source_file)
 
 
-def refresh_sources():
+def refresh_sources_display():
     for widget in root.winfo_children():
         widget.destroy()
 
 def delete_income(index):
-    del income_sources[index]
-    save_income_sources()
-    refresh_sources()
+    del sources['income_sources'][index]
+    save_sources()
+    refresh_sources_display()
     display_all()
 
 def delete_outcome(index):
-    del outcome_sources[index]
-    save_outcome_sources()
-    refresh_sources()
+    del sources['outcome_sources'][index]
+    save_sources()
+    refresh_sources_display()
     display_all()
 
 def add_new_income(name, amount, start_dt, window):
-    income_sources.append({
+    sources['income_sources'].append({
         "name": name,
         "amount": amount,
         "start_date": start_dt,
     })
-    save_income_sources()
-    refresh_sources()
+    save_sources()
+    refresh_sources_display()
     display_all()
     window.destroy()
 
 def add_new_outcome(name, amount, start_dt, window):
-    outcome_sources.append({
+    sources['outcome_sources'].append({
         "name": name,
         "amount": amount,
         "start_date": start_dt,
     })
-    save_outcome_sources()
-    refresh_sources()
+    save_sources()
+    refresh_sources_display()
     display_all()
     window.destroy()
 
@@ -165,7 +156,7 @@ def open_show_chart_window():
     create_chart_button = tk.Button(
         new_window, 
         text="Stwórz wykres", 
-        command=lambda: draw_chart(start_date_entry.get(), end_date_entry.get(), income_outcome_data)
+        command=lambda: draw_chart(start_date_entry.get(), end_date_entry.get(), sources)
     )
     create_chart_button.pack(side=tk.TOP, anchor="w", pady=0)
 
@@ -189,12 +180,7 @@ root = tk.Tk()
 root.title("GetRich")
 root.geometry("400x400")
 
-load_income_sources()
-load_outcome_sources()
-income_outcome_data = {
-    "income_sources": income_sources,
-    "outcome_sources": outcome_sources
-}
+load_sources()
 
 def display_all():
     # New income source button.
@@ -212,7 +198,7 @@ def display_all():
     label = tk.Label(root, text="Źródła przychodu", font=("Helvetica", 16, "bold"))
     label.pack(anchor='w')
 
-    for index, income_source in enumerate(income_sources):
+    for index, income_source in enumerate(sources['income_sources']):
         frame = tk.Frame(root)
         frame.pack(anchor='w', fill='x')
 
@@ -226,7 +212,7 @@ def display_all():
     label = tk.Label(root, text="Źródła rozchodu", font=("Helvetica", 16, "bold"))
     label.pack(anchor='w')
 
-    for index, outcome_source in enumerate(outcome_sources):
+    for index, outcome_source in enumerate(sources['outcome_sources']):
         frame = tk.Frame(root)
         frame.pack(anchor='w', fill='x')
 
