@@ -1,5 +1,6 @@
 import json
 import tkinter as tk
+from charts import draw_chart
 
 
 income_sources = []
@@ -133,10 +134,16 @@ load_income_sources()
 load_outcome_sources()
 
 def display_all():
+    # New income source button.
     new_window_button = tk.Button(root, text="Dodaj źródło przychodu", command=open_new_source_income_window)
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
+    # New outcome source button.
     new_window_button = tk.Button(root, text="Dodaj źródło rozchodu", command=open_new_source_outcome_window)
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
+    # Draw chart button.
+    new_window_button = tk.Button(root, text="Wykres", command=lambda: draw_chart())
+    new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
+
 
     # Display income sources.
     label = tk.Label(root, text="Źródła przychodu", font=("Helvetica", 16, "bold"))
