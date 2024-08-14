@@ -165,7 +165,7 @@ def open_show_chart_window():
     create_chart_button = tk.Button(
         new_window, 
         text="Stwórz wykres", 
-        command=lambda: draw_chart())
+        command=lambda: draw_chart(start_date_entry.get(), end_date_entry.get()))
     create_chart_button.pack(side=tk.TOP, anchor="w", pady=0)
 
     save_chart_settings_button = tk.Button(

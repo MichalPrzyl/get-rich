@@ -3,28 +3,29 @@ import pandas as pd
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
 
-def draw_chart():
-    # Obecna data
-    today = datetime.today()
+def draw_chart(start_date, end_date):
+    # Konwersja stringów na obiekty datetime
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
 
-    # Tworzenie listy miesięcy na 3 lata do przodu
-    months = pd.date_range(today, periods=36, freq='MS')  # MS oznacza początek miesiąca
+    # Tworzenie listy miesięcy w podanym zakresie dat
+    months = pd.date_range(start=start_date, end=end_date, freq='MS')
 
     # Przykładowe dane na osi Y
-    y = range(1, 37)  # Przykładowe dane od 1 do 36
+    y = range(1, len(months) + 1)  # Tworzy listę danych Y dopasowaną do liczby miesięcy
 
     # Tworzenie wykresu
     plt.figure(figsize=(10, 6))
     plt.plot(months, y, marker='o', linestyle='-', color='b')
 
-    # Formatowanie osi X, aby pokazywała miesiące
+    # Ustawienie lokalizatorów osi X, aby linie siatki były co miesiąc
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator())  # Główne linie siatki co miesiąc
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=3))  # Pokazuje co trzeci miesiąc
 
-    plt.title("Wykres z miesiącami na osi X (3 lata do przodu)")
+    plt.title(f"Wykres od {start_date.strftime('%Y-%m-%d')} do {end_date.strftime('%Y-%m-%d')}")
     plt.xlabel("Miesiące")
     plt.ylabel("Wartość")
-    plt.grid(True)
+    plt.grid(True, which='both', axis='x')  # Siatka włączona na osi X
 
     plt.gcf().autofmt_xdate()  # Automatyczne formatowanie dat na osi X
 
