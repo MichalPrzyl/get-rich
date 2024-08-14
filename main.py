@@ -58,7 +58,10 @@ def open_new_window():
     start_date_entry.pack()
     
     # add_income_button = tk.Button(new_window, text="Dodaj źródło przychodu1", command=add_new_income(name_entry, amount_entry, start_date_entry))
-    add_income_button = tk.Button(new_window, text="Dodaj źródło przychodu1", command=lambda: add_new_income(name_entry, amount_entry, start_date_entry))
+    add_income_button = tk.Button(
+        new_window, 
+        text="Dodaj źródło przychodu1", 
+        command=lambda: add_new_income(name_entry.get(), amount_entry.get(), start_date_entry.get()))
     add_income_button.pack(side=tk.TOP, anchor="w", pady=0)
 
 # Main app window.
