@@ -24,17 +24,8 @@ def load_outcome_sources():
         outcome_sources = json.load(file)
 
 
-# Income source template
-# {
-#     "name": "Pensja MP",
-#     "amount": 100,
-#     "start_date": "2021-01-01",
-# }
-
 def refresh_sources():
-# Clear all existing income source widgets
     for widget in root.winfo_children():
-        # if isinstance(widget, tk.Label) or isinstance(widget, tk.Button):
         widget.destroy()
 
 def delete_income(index):
@@ -74,31 +65,29 @@ def add_new_outcome(name, amount, start_dt, window):
 def open_new_source_income_window():
     new_window = tk.Toplevel(root)
     new_window.title("Dodaj źródło przychodu")
-    new_window.geometry("400x400")
+    new_window.geometry("200x200")
     
-    source_count = len(income_sources) + 1
-
-    name_label = tk.Label(new_window, text=f"Nazwa źródła {source_count}:")
-    name_label.pack()
+    name_label = tk.Label(new_window, text=f"Nazwa źródła:")
+    name_label.pack(anchor='w')
     
     name_entry = tk.Entry(new_window, width=30)
-    name_entry.pack()
+    name_entry.pack(anchor='w')
 
-    amount_label = tk.Label(new_window, text=f"Kwota źródła {source_count}:")
-    amount_label.pack()
+    amount_label = tk.Label(new_window, text=f"Kwota źródła:")
+    amount_label.pack(anchor='w')
     
     amount_entry = tk.Entry(new_window, width=30)
-    amount_entry.pack()
+    amount_entry.pack(anchor='w')
 
-    start_date_label = tk.Label(new_window, text=f"Data rozpoczęcia źródła {source_count}:")
-    start_date_label.pack()
+    start_date_label = tk.Label(new_window, text=f"Data rozpoczęcia źródła:")
+    start_date_label.pack(anchor='w')
     
     start_date_entry = tk.Entry(new_window, width=30)
-    start_date_entry.pack()
+    start_date_entry.pack(anchor='w')
     
     add_income_button = tk.Button(
         new_window, 
-        text="Dodaj źródło przychodu1", 
+        text="Dodaj źródło przychodu", 
         command=lambda: add_new_income(
             name_entry.get(), amount_entry.get(), start_date_entry.get(), new_window)
         )
@@ -107,31 +96,29 @@ def open_new_source_income_window():
 def open_new_source_outcome_window():
     new_window = tk.Toplevel(root)
     new_window.title("Dodaj źródło rozchodu")
-    new_window.geometry("400x400")
+    new_window.geometry("200x200")
     
-    source_count = len(outcome_sources) + 1
-
-    name_label = tk.Label(new_window, text=f"Nazwa źródła {source_count}:")
-    name_label.pack()
+    name_label = tk.Label(new_window, text=f"Nazwa źródła:")
+    name_label.pack(anchor='w')
     
     name_entry = tk.Entry(new_window, width=30)
-    name_entry.pack()
+    name_entry.pack(anchor='w')
 
-    amount_label = tk.Label(new_window, text=f"Kwota źródła {source_count}:")
-    amount_label.pack()
+    amount_label = tk.Label(new_window, text=f"Kwota źródła:")
+    amount_label.pack(anchor='w')
     
     amount_entry = tk.Entry(new_window, width=30)
-    amount_entry.pack()
+    amount_entry.pack(anchor='w')
 
-    start_date_label = tk.Label(new_window, text=f"Data rozpoczęcia źródła {source_count}:")
-    start_date_label.pack()
+    start_date_label = tk.Label(new_window, text=f"Data rozpoczęcia źródła:")
+    start_date_label.pack(anchor='w')
     
     start_date_entry = tk.Entry(new_window, width=30)
-    start_date_entry.pack()
+    start_date_entry.pack(anchor='w')
     
     add_outcome_button = tk.Button(
         new_window, 
-        text="Dodaj źródło przychodu1", 
+        text="Dodaj źródło rozchodu", 
         command=lambda: add_new_outcome(
             name_entry.get(), amount_entry.get(), start_date_entry.get(), new_window)
         )
