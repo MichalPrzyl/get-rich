@@ -1,56 +1,72 @@
+import json
 import tkinter as tk
-from tkinter import messagebox
-import matplotlib.pyplot as plt
-import pandas as pd
 
-class InvestmentSimulator:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Symulacja Inwestora")
-        
-        # Etykiety
-        tk.Label(root, text="Miesięczne wpływy:").grid(row=0, column=0)
-        tk.Label(root, text="Miesięczne koszta:").grid(row=1, column=0)
-        
-        # Pola do wprowadzania danych
-        self.entry_inflow = tk.Entry(root)
-        self.entry_inflow.grid(row=0, column=1)
-        
-        self.entry_cost = tk.Entry(root)
-        self.entry_cost.grid(row=1, column=1)
-        
-        # Przycisk do uruchomienia symulacji
-        tk.Button(root, text="Symuluj", command=self.simulate).grid(row=2, columnspan=2)
-        
-    def simulate(self):
-        try:
-            inflow = float(self.entry_inflow.get())
-            cost = float(self.entry_cost.get())
-            monthly_balance = inflow - cost
-            
-            # Symulacja przez 20 lat (240 miesięcy)
-            months = 240
-            balance = [0]
-            for month in range(1, months + 1):
-                balance.append(balance[-1] + monthly_balance)
-            
-            self.show_results(balance)
-        
-        except ValueError:
-            messagebox.showerror("Błąd", "Proszę wprowadzić poprawne wartości liczbowe.")
 
-    def show_results(self, balance):
-        # Tworzenie wykresu
-        plt.figure(figsize=(10, 6))
-        plt.plot(balance, label="Saldo konta")
-        plt.title("Saldo konta przez 20 lat")
-        plt.xlabel("Miesiąc")
-        plt.ylabel("Saldo (PLN)")
-        plt.legend()
-        plt.grid(True)
-        plt.show()
+income_sources = []
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = InvestmentSimulator(root)
-    root.mainloop()
+def save_income_sources():
+    with open("income_sources.json", "w") as file:
+        json.dump(income_sources, file)
+
+def load_income_sources():
+    global income_sources
+    with open("income_sources.json", "r") as file:
+        income_sources = json.load(file)
+
+
+# Income source template
+# {
+#     "name": "Pensja MP",
+#     "amount": 100,
+#     "start_date": "2021-01-01",
+# }
+
+def add_new_income(name, amount, start_dt):
+    print(f"name: {name}")
+    print(f"amount: {amount}")
+    print(f"start_dt: {start_dt}")
+    income_sources.append({
+        "name": name,
+        "amount": amount,
+        "start_date": start_dt,
+    })
+    save_income_sources()
+
+def open_new_window():
+    new_window = tk.Toplevel(root)
+    new_window.title("Dodaj źródło przychodu")
+    new_window.geometry("400x400")
+    
+    source_count = len(income_sources) + 1
+
+    name_label = tk.Label(new_window, text=f"Nazwa źródła {source_count}:")
+    name_label.pack()
+    
+    name_entry = tk.Entry(new_window, width=30)
+    name_entry.pack()
+
+    amount_label = tk.Label(new_window, text=f"Kwota źródła {source_count}:")
+    amount_label.pack()
+    
+    amount_entry = tk.Entry(new_window, width=30)
+    amount_entry.pack()
+
+    start_date_label = tk.Label(new_window, text=f"Data rozpoczęcia źródła {source_count}:")
+    start_date_label.pack()
+    
+    start_date_entry = tk.Entry(new_window, width=30)
+    start_date_entry.pack()
+    
+    # add_income_button = tk.Button(new_window, text="Dodaj źródło przychodu1", command=add_new_income(name_entry, amount_entry, start_date_entry))
+    add_income_button = tk.Button(new_window, text="Dodaj źródło przychodu1", command=lambda: add_new_income(name_entry, amount_entry, start_date_entry))
+    add_income_button.pack(side=tk.TOP, anchor="w", pady=0)
+
+# Main app window.
+root = tk.Tk()
+root.title("GetRich")
+root.geometry("400x400")
+# load_income_sources()
+new_window_button = tk.Button(root, text="Dodaj źródło przychodu", command=open_new_window)
+new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
+
+root.mainloop()
