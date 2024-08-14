@@ -8,13 +8,12 @@ sources = []
 
 def save_sources():
     with open("sources.json", "w") as file:
-        json.dump(sources, file)
+        json.dump(sources, file, indent=4)
 
 def load_sources():
     global sources
     with open("sources.json", "r") as source_file:
         sources = json.load(source_file)
-
 
 def refresh_sources_display():
     for widget in root.winfo_children():
@@ -32,22 +31,24 @@ def delete_outcome(index):
     refresh_sources_display()
     display_all()
 
-def add_new_income(name, amount, start_dt, window):
+def add_new_income(name, amount, start_dt, end_dt, window):
     sources['income_sources'].append({
         "name": name,
         "amount": amount,
         "start_date": start_dt,
+        "end_date": end_dt,
     })
     save_sources()
     refresh_sources_display()
     display_all()
     window.destroy()
 
-def add_new_outcome(name, amount, start_dt, window):
+def add_new_outcome(name, amount, start_dt, end_dt, window):
     sources['outcome_sources'].append({
         "name": name,
         "amount": amount,
         "start_date": start_dt,
+        "end_date": end_dt,
     })
     save_sources()
     refresh_sources_display()
@@ -76,12 +77,18 @@ def open_new_source_income_window():
     
     start_date_entry = tk.Entry(new_window, width=30)
     start_date_entry.pack(anchor='w')
+
+    end_date_label = tk.Label(new_window, text=f"Data zakończenia źródła:")
+    end_date_label.pack(anchor='w')
+    
+    end_date_entry = tk.Entry(new_window, width=30)
+    end_date_entry.pack(anchor='w')
     
     add_income_button = tk.Button(
         new_window, 
         text="Dodaj źródło przychodu", 
         command=lambda: add_new_income(
-            name_entry.get(), amount_entry.get(), start_date_entry.get(), new_window)
+            name_entry.get(), amount_entry.get(), start_date_entry.get(), end_date_entry.get(), new_window)
         )
     add_income_button.pack(side=tk.TOP, anchor="w", pady=0)
 
@@ -107,12 +114,18 @@ def open_new_source_outcome_window():
     
     start_date_entry = tk.Entry(new_window, width=30)
     start_date_entry.pack(anchor='w')
+
+    end_date_label = tk.Label(new_window, text=f"Data zakończenia źródła:")
+    end_date_label.pack(anchor='w')
+    
+    end_date_entry = tk.Entry(new_window, width=30)
+    end_date_entry.pack(anchor='w')
     
     add_outcome_button = tk.Button(
         new_window, 
         text="Dodaj źródło rozchodu", 
         command=lambda: add_new_outcome(
-            name_entry.get(), amount_entry.get(), start_date_entry.get(), new_window)
+            name_entry.get(), amount_entry.get(), start_date_entry.get(), end_date_entry.get(), new_window)
         )
     add_outcome_button.pack(side=tk.TOP, anchor="w", pady=0)
 

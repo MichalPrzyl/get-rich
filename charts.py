@@ -13,7 +13,6 @@ def draw_chart(start_date, end_date, income_outcome_data):
 
     # Tworzenie listy miesięcy w podanym zakresie dat
     months = pd.date_range(start=start_date, end=end_date, freq='MS')
-    print(f"Months: {months}")
     # Y asis data.
     # y = range(1, len(months) + 1)  # Tworzy listę danych Y dopasowaną do liczby miesięcy
     y = calculate_values_for_months(months, income_outcome_data)
