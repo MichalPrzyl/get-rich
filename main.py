@@ -31,6 +31,12 @@ def delete_outcome(index):
     refresh_sources_display()
     display_all()
 
+def delete_random_outcome(index):
+    del sources['random_outcome_sources'][index]
+    save_sources()
+    refresh_sources_display()
+    display_all()
+
 def add_new_income(name, amount, start_dt, end_dt, window):
     sources['income_sources'].append({
         "name": name,
@@ -47,6 +53,19 @@ def add_new_outcome(name, amount, start_dt, end_dt, window):
     sources['outcome_sources'].append({
         "name": name,
         "amount": amount,
+        "start_date": start_dt,
+        "end_date": end_dt,
+    })
+    save_sources()
+    refresh_sources_display()
+    display_all()
+    window.destroy()
+
+def add_new_random_outcome(name, min_amount, max_amount, start_dt, end_dt, window):
+    sources['random_outcome_sources'].append({
+        "name": name,
+        "min_amount": min_amount,
+        "max_amount": max_amount,
         "start_date": start_dt,
         "end_date": end_dt,
     })
@@ -129,6 +148,49 @@ def open_new_source_outcome_window():
         )
     add_outcome_button.pack(side=tk.TOP, anchor="w", pady=0)
 
+def open_new_random_source_outcome_window():
+    new_window = tk.Toplevel(root)
+    new_window.title("Dodaj losowe źródło rozchodu")
+    # new_window.geometry("200x200")
+    
+    name_label = tk.Label(new_window, text=f"Nazwa źródła:")
+    name_label.pack(anchor='w')
+    
+    name_entry = tk.Entry(new_window, width=30)
+    name_entry.pack(anchor='w')
+
+    min_amount_label = tk.Label(new_window, text=f"Minimalna kwota źródła:")
+    min_amount_label.pack(anchor='w')
+
+    min_amount_entry = tk.Entry(new_window, width=30)
+    min_amount_entry.pack(anchor='w')
+
+    max_amount_label = tk.Label(new_window, text=f"Maxymalna kwota źródła:")
+    max_amount_label.pack(anchor='w')
+
+    max_amount_entry = tk.Entry(new_window, width=30)
+    max_amount_entry.pack(anchor='w')
+
+    start_date_label = tk.Label(new_window, text=f"Data rozpoczęcia źródła:")
+    start_date_label.pack(anchor='w')
+    
+    start_date_entry = tk.Entry(new_window, width=30)
+    start_date_entry.pack(anchor='w')
+
+    end_date_label = tk.Label(new_window, text=f"Data zakończenia źródła:")
+    end_date_label.pack(anchor='w')
+    
+    end_date_entry = tk.Entry(new_window, width=30)
+    end_date_entry.pack(anchor='w')
+    
+    add_outcome_button = tk.Button(
+        new_window, 
+        text="Dodaj źródło rozchodu", 
+        command=lambda: add_new_random_outcome(
+            name_entry.get(), min_amount_entry.get(), max_amount_entry.get(), start_date_entry.get(), end_date_entry.get(), new_window)
+        )
+    add_outcome_button.pack(side=tk.TOP, anchor="w", pady=0)
+
 def save_chart_settings(start_date, end_date):
     with open("chart_settings.json", "w") as file:
         json.dump({
@@ -202,8 +264,11 @@ def display_all():
     # New outcome source button.
     new_window_button = tk.Button(root, text="Dodaj źródło rozchodu", command=open_new_source_outcome_window)
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
+    # New random outcome source button.
+    new_window_button = tk.Button(root, text="Dodaj losowe źródło rozchodu", command=open_new_random_source_outcome_window)
+    new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
     # Draw chart button.
-    new_window_button = tk.Button(root, text="Wykres", command=lambda: open_show_chart_window(float(initial_cash_entry.get())))
+    new_window_button = tk.Button(root, text="Wykres", command=lambda: open_show_chart_window(float(initial_cash_entry.get() if initial_cash_entry.get() else 0)))
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
 
     # Initial cash label.
@@ -222,7 +287,8 @@ def display_all():
         frame = tk.Frame(root)
         frame.pack(anchor='w', fill='x')
 
-        src_income = tk.Label(frame, text=f"{income_source['name']}: {income_source['amount']}")
+        src_income = tk.Label(frame, text=f"{income_source['name']}, od: {income_source['start_date']}, do: {income_source['end_date']}, kwota: {income_source['amount']}")
+
         src_income.pack(side=tk.LEFT)
 
         delete_button = tk.Button(frame, text="Usuń", command=lambda i=index: delete_income(i))
@@ -236,10 +302,24 @@ def display_all():
         frame = tk.Frame(root)
         frame.pack(anchor='w', fill='x')
 
-        src_income = tk.Label(frame, text=f"{outcome_source['name']}: {outcome_source['amount']}")
+        src_income = tk.Label(frame, text=f"{outcome_source['name']}, od: {outcome_source['start_date']}, do: {outcome_source['end_date']}, kwota: {outcome_source['amount']}")
         src_income.pack(side=tk.LEFT)
 
         delete_button = tk.Button(frame, text="Usuń", command=lambda i=index: delete_outcome(i))
+        delete_button.pack(side=tk.RIGHT)
+
+    # Display random outcome sources.
+    label = tk.Label(root, text="Losowe źródła rozchodu", font=("Helvetica", 16, "bold"))
+    label.pack(anchor='w')
+
+    for index, random_outcome_source in enumerate(sources['random_outcome_sources']):
+        frame = tk.Frame(root)
+        frame.pack(anchor='w', fill='x')
+
+        src_income = tk.Label(frame, text=f"{random_outcome_source['name']}, od: {random_outcome_source['start_date']}, do: {random_outcome_source['end_date']}, min: {random_outcome_source['min_amount']}, max: {random_outcome_source['max_amount']}")
+        src_income.pack(side=tk.LEFT)
+
+        delete_button = tk.Button(frame, text="Usuń", command=lambda i=index: delete_random_outcome(i))
         delete_button.pack(side=tk.RIGHT)
 
 display_all()
