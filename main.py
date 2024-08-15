@@ -76,6 +76,7 @@ def add_new_random_outcome(name, min_amount, max_amount, start_dt, end_dt, windo
 
 def open_new_source_income_window():
     new_window = tk.Toplevel(root)
+    new_window.resizable(False, False)
     new_window.title("Dodaj źródło przychodu")
     new_window.geometry("200x200")
     
@@ -113,6 +114,7 @@ def open_new_source_income_window():
 
 def open_new_source_outcome_window():
     new_window = tk.Toplevel(root)
+    new_window.resizable(False, False)
     new_window.title("Dodaj źródło rozchodu")
     new_window.geometry("200x200")
     
@@ -150,6 +152,7 @@ def open_new_source_outcome_window():
 
 def open_new_random_source_outcome_window():
     new_window = tk.Toplevel(root)
+    new_window.resizable(False, False)
     new_window.title("Dodaj losowe źródło rozchodu")
     # new_window.geometry("200x200")
     
@@ -211,6 +214,7 @@ def load_chart_settings(start_date_entry, end_date_entry):
 
 def open_show_chart_window(initial_cash):
     new_window = tk.Toplevel(root)
+    new_window.resizable(False, False)
     new_window.title("Stwórz wykres")
     # new_window.geometry("500x500")
     
@@ -252,6 +256,7 @@ def open_show_chart_window(initial_cash):
 
 # Main app window.
 root = tk.Tk()
+root.resizable(False, False)
 root.title("GetRich")
 root.geometry("400x400")
 
