@@ -147,7 +147,7 @@ def load_chart_settings(start_date_entry, end_date_entry):
     except FileNotFoundError:
         pass
 
-def open_show_chart_window():
+def open_show_chart_window(initial_cash):
     new_window = tk.Toplevel(root)
     new_window.title("Stwórz wykres")
     # new_window.geometry("500x500")
@@ -169,7 +169,7 @@ def open_show_chart_window():
     create_chart_button = tk.Button(
         new_window, 
         text="Stwórz wykres", 
-        command=lambda: draw_chart(start_date_entry.get(), end_date_entry.get(), sources)
+        command=lambda: draw_chart(start_date_entry.get(), end_date_entry.get(), sources, initial_cash)
     )
     create_chart_button.pack(side=tk.TOP, anchor="w", pady=0)
 
@@ -203,8 +203,15 @@ def display_all():
     new_window_button = tk.Button(root, text="Dodaj źródło rozchodu", command=open_new_source_outcome_window)
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
     # Draw chart button.
-    new_window_button = tk.Button(root, text="Wykres", command=lambda: open_show_chart_window())
+    new_window_button = tk.Button(root, text="Wykres", command=lambda: open_show_chart_window(float(initial_cash_entry.get())))
     new_window_button.pack(side=tk.TOP, anchor="w", pady=0)
+
+    # Initial cash label.
+    initial_cash_label = tk.Label(root, text=f"Kwota początkowa:")
+    initial_cash_label.pack(anchor='w')
+    # Initial cash input.
+    initial_cash_entry = tk.Entry(root, width=30)
+    initial_cash_entry.pack(anchor='w')
 
 
     # Display income sources.

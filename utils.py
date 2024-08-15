@@ -1,9 +1,9 @@
 from datetime import datetime
 
 
-def calculate_values_for_months(months, income_outcome_data):
+def calculate_values_for_months(months, income_outcome_data, initial_cash):
     return_values = []
-    current_cash = 0
+    current_cash = initial_cash
     for month in months:
         income_for_month = calculate_income_for_month(month, income_outcome_data)
         print(f"current_cash before: {current_cash}")
@@ -20,7 +20,9 @@ def calculate_values_for_months(months, income_outcome_data):
 def calculate_income_for_month(
         month, income_outcome_data):
     incomes = get_income_sources_for_month(month, income_outcome_data)
+    print(f"incomes: {incomes}")
     outcomes = get_outcome_sources_for_month(month, income_outcome_data)
+    print(f"outcomes: {outcomes}")
     return incomes - outcomes
 
 def get_income_sources_for_month(month, income_outcome_data):
@@ -37,6 +39,6 @@ def get_outcome_sources_for_month(month, income_outcome_data):
     values = []
     for outcome_source in outcome_sources:
         if datetime.strptime(outcome_source["start_date"], "%Y-%m-%d") <= month \
-                and datetime.strptime(outcome_source["start_date"], "%Y-%m-%d") >= month:
+                and datetime.strptime(outcome_source["end_date"], "%Y-%m-%d") >= month:
             values.append(float(outcome_source["amount"]))
     return sum(values)

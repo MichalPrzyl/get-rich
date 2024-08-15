@@ -4,7 +4,7 @@ import matplotlib.dates as mdates
 from datetime import datetime
 from utils import calculate_values_for_months
 
-def draw_chart(start_date, end_date, income_outcome_data):
+def draw_chart(start_date, end_date, income_outcome_data, initial_cash):
     # Konwersja stringów na obiekty datetime
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
@@ -13,7 +13,7 @@ def draw_chart(start_date, end_date, income_outcome_data):
     months = pd.date_range(start=start_date, end=end_date, freq='MS')
     
     # Y asis data.
-    y = calculate_values_for_months(months, income_outcome_data)
+    y = calculate_values_for_months(months, income_outcome_data, initial_cash)
 
     # Tworzenie wykresu
     plt.figure(figsize=(10, 6))
@@ -24,7 +24,7 @@ def draw_chart(start_date, end_date, income_outcome_data):
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 
     # Ustawienie gęstszej skali na osi Y
-    plt.gca().yaxis.set_major_locator(plt.MultipleLocator(100))
+    # plt.gca().yaxis.set_major_locator(plt.MultipleLocator(100))
 
     # Włączenie poziomych linii siatki
     plt.grid(True, which='both', axis='both', linestyle='--', linewidth=0.7)  # Siatka na obu osiach
