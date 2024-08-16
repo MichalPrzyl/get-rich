@@ -37,24 +37,26 @@ def delete_random_outcome(index):
     refresh_sources_display()
     display_all()
 
-def add_new_income(name, amount, start_dt, end_dt, window):
+def add_new_income(name, amount, start_dt, end_dt, probability, window):
     sources['income_sources'].append({
         "name": name,
         "amount": amount,
         "start_date": start_dt,
         "end_date": end_dt,
+        "probability": probability,
     })
     save_sources()
     refresh_sources_display()
     display_all()
     window.destroy()
 
-def add_new_outcome(name, amount, start_dt, end_dt, window):
+def add_new_outcome(name, amount, start_dt, end_dt, probability, window):
     sources['outcome_sources'].append({
         "name": name,
         "amount": amount,
         "start_date": start_dt,
         "end_date": end_dt,
+        "probability": probability
     })
     save_sources()
     refresh_sources_display()
@@ -78,7 +80,7 @@ def open_new_source_income_window():
     new_window = tk.Toplevel(root)
     new_window.resizable(False, False)
     new_window.title("Dodaj źródło przychodu")
-    new_window.geometry("200x200")
+    new_window.geometry("200x300")
     
     name_label = tk.Label(new_window, text=f"Nazwa źródła:")
     name_label.pack(anchor='w')
@@ -104,11 +106,18 @@ def open_new_source_income_window():
     end_date_entry = tk.Entry(new_window, width=30)
     end_date_entry.pack(anchor='w')
     
+    # Probabilty
+    probabilty_label = tk.Label(new_window, text=f"Prawdopodobientwo")
+    probabilty_label.pack(anchor='w')
+    
+    probabilty_entry = tk.Entry(new_window, width=30)
+    probabilty_entry.pack(anchor='w')
+
     add_income_button = tk.Button(
         new_window, 
         text="Dodaj źródło przychodu", 
         command=lambda: add_new_income(
-            name_entry.get(), amount_entry.get(), start_date_entry.get(), end_date_entry.get(), new_window)
+            name_entry.get(), amount_entry.get(), start_date_entry.get(), end_date_entry.get(), probabilty_entry.get(), new_window)
         )
     add_income_button.pack(side=tk.TOP, anchor="w", pady=0)
 
@@ -116,7 +125,7 @@ def open_new_source_outcome_window():
     new_window = tk.Toplevel(root)
     new_window.resizable(False, False)
     new_window.title("Dodaj źródło rozchodu")
-    new_window.geometry("200x200")
+    new_window.geometry("200x300")
     
     name_label = tk.Label(new_window, text=f"Nazwa źródła:")
     name_label.pack(anchor='w')
@@ -142,11 +151,18 @@ def open_new_source_outcome_window():
     end_date_entry = tk.Entry(new_window, width=30)
     end_date_entry.pack(anchor='w')
     
+    # Probabilty
+    probabilty_label = tk.Label(new_window, text=f"Prawdopodobientwo")
+    probabilty_label.pack(anchor='w')
+    
+    probabilty_entry = tk.Entry(new_window, width=30)
+    probabilty_entry.pack(anchor='w')
+
     add_outcome_button = tk.Button(
         new_window, 
         text="Dodaj źródło rozchodu", 
         command=lambda: add_new_outcome(
-            name_entry.get(), amount_entry.get(), start_date_entry.get(), end_date_entry.get(), new_window)
+            name_entry.get(), amount_entry.get(), start_date_entry.get(), end_date_entry.get(), probabilty_entry.get(), new_window)
         )
     add_outcome_button.pack(side=tk.TOP, anchor="w", pady=0)
 
@@ -258,7 +274,7 @@ def open_show_chart_window(initial_cash):
 root = tk.Tk()
 root.resizable(False, False)
 root.title("GetRich")
-root.geometry("400x400")
+root.geometry("600x400")
 
 load_sources()
 
@@ -292,7 +308,7 @@ def display_all():
         frame = tk.Frame(root)
         frame.pack(anchor='w', fill='x')
 
-        src_income = tk.Label(frame, text=f"{income_source['name']}, od: {income_source['start_date']}, do: {income_source['end_date']}, kwota: {income_source['amount']}")
+        src_income = tk.Label(frame, text=f"{income_source['name']}, od: {income_source['start_date']}, do: {income_source['end_date']}, kwota: {income_source['amount']}, prawdopodobienstwo: {income_source['probability']}")
 
         src_income.pack(side=tk.LEFT)
 
@@ -307,7 +323,7 @@ def display_all():
         frame = tk.Frame(root)
         frame.pack(anchor='w', fill='x')
 
-        src_income = tk.Label(frame, text=f"{outcome_source['name']}, od: {outcome_source['start_date']}, do: {outcome_source['end_date']}, kwota: {outcome_source['amount']}")
+        src_income = tk.Label(frame, text=f"{outcome_source['name']}, od: {outcome_source['start_date']}, do: {outcome_source['end_date']}, kwota: {outcome_source['amount']}, prawdopodobienstwo: {outcome_source['probability']}")
         src_income.pack(side=tk.LEFT)
 
         delete_button = tk.Button(frame, text="Usuń", command=lambda i=index: delete_outcome(i))

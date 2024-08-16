@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
 from datetime import datetime
 from utils import calculate_values_for_months
 
@@ -25,6 +26,8 @@ def draw_chart(start_date, end_date, income_outcome_data, initial_cash):
 
     # Ustawienie gęstszej skali na osi Y
     # plt.gca().yaxis.set_major_locator(plt.MultipleLocator(100))
+    plt.gca().yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{int(x):,}'))
+
 
     # Włączenie poziomych linii siatki
     plt.grid(True, which='both', axis='both', linestyle='--', linewidth=0.7)  # Siatka na obu osiach

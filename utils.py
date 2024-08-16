@@ -32,7 +32,11 @@ def get_income_sources_for_month(month, income_outcome_data):
     for income_source in income_sources:
         if datetime.strptime(income_source["start_date"], "%Y-%m-%d") <= month \
                 and datetime.strptime(income_source["end_date"], "%Y-%m-%d") >= month:
-            values.append(float(income_source["amount"]))
+            # If there is no probability provided, we assume it's 100%
+            probability = income_source.get("probability", 100)
+            random_number = get_random_from_range(0, 101)
+            if random_number <= float(probability):
+                values.append(float(income_source["amount"]))
     return sum(values)
 
 def get_outcome_sources_for_month(month, income_outcome_data):
@@ -41,7 +45,11 @@ def get_outcome_sources_for_month(month, income_outcome_data):
     for outcome_source in outcome_sources:
         if datetime.strptime(outcome_source["start_date"], "%Y-%m-%d") <= month \
                 and datetime.strptime(outcome_source["end_date"], "%Y-%m-%d") >= month:
-            values.append(float(outcome_source["amount"]))
+            # If there is no probability provided, we assume it's 100%
+            probability = outcome_source.get("probability", 100)
+            random_number = get_random_from_range(0, 101)
+            if random_number <= float(probability):
+                values.append(float(outcome_source["amount"]))
     return sum(values)
 
 def get_random_sources_for_month(month, income_outcome_data):
@@ -57,3 +65,5 @@ def get_random_sources_for_month(month, income_outcome_data):
 
 def get_random_from_range(range_from, range_to):
     return random.randint(range_from, range_to)
+
+
